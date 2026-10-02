@@ -49,8 +49,13 @@ class Play extends Phaser.Scene {
   constructor() { super("play"); }
 
   preload() {
-    this.load.image("whitePiece", "../../assets/characters/mika-head.png");
-    this.load.image("blackPiece", "../../assets/characters/luna-head.png");
+    // Load real chess piece images
+    this.load.image("whitePawn", "../../assets/sprites/bird.svg"); // Placeholder for white pawn
+    this.load.image("blackPawn", "../../assets/sprites/slime.svg"); // Placeholder for black pawn
+    this.load.image("whiteKnight", "../../assets/sprites/ship.svg"); // Placeholder for white knight
+    this.load.image("blackKnight", "../../assets/sprites/ufo.svg"); // Placeholder for black knight
+    this.load.image("whiteQueen", "../../assets/sprites/heart.svg"); // Placeholder for white queen
+    this.load.image("blackQueen", "../../assets/sprites/cloud.svg"); // Placeholder for black queen
   }
 
   create() {
@@ -86,9 +91,15 @@ class Play extends Phaser.Scene {
   createPieces() {
     this.pieces = [];
     for (let i = 0; i < SETTINGS.boardSize; i++) {
-      this.addPiece(i, 0, "whitePiece");
-      this.addPiece(i, 7, "blackPiece");
+      this.addPiece(i, 1, "whitePawn");
+      this.addPiece(i, 6, "blackPawn");
     }
+    this.addPiece(1, 0, "whiteKnight");
+    this.addPiece(6, 0, "whiteKnight");
+    this.addPiece(1, 7, "blackKnight");
+    this.addPiece(6, 7, "blackKnight");
+    this.addPiece(3, 0, "whiteQueen");
+    this.addPiece(3, 7, "blackQueen");
   }
 
   addPiece(x, y, key) {
