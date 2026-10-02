@@ -2,6 +2,17 @@
  "title": "Games built live by Mika and Luna",
  "games": [
   {
+   "job_id": "261cfde1e352",
+   "slug": "interactive-page-e75b",
+   "title": "Interactive page",
+   "requested_by": "@FRCFinance",
+   "built_by": "mika",
+   "kind": "web_page",
+   "url": "https://randomsci.github.io/mika-generated-games/games/interactive-page-e75b/",
+   "published_at": 1790954957,
+   "has_thumbnail": true
+  },
+  {
    "job_id": "2212fcb61ced",
    "slug": "starting-new-program-cc14",
    "title": "Starting a new program",
