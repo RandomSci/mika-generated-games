@@ -2,6 +2,17 @@
  "title": "Games built live by Mika and Luna",
  "games": [
   {
+   "job_id": "5572119893d0",
+   "slug": "game-without-external-controls-a3a6",
+   "title": "Game without external controls",
+   "requested_by": "@MathUnlockedYT",
+   "built_by": "mika",
+   "kind": "web_game",
+   "url": "https://randomsci.github.io/mika-generated-games/games/game-without-external-controls-a3a6/",
+   "published_at": 1790944851,
+   "has_thumbnail": true
+  },
+  {
    "job_id": "cf5db0b61eb0",
    "slug": "website-selwyn-builds-3c91",
    "title": "Website for Selwyn Builds",
