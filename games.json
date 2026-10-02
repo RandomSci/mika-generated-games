@@ -2,6 +2,17 @@
  "title": "Games built live by Mika and Luna",
  "games": [
   {
+   "job_id": "12669f2d17ea",
+   "slug": "game-look-better-fabe",
+   "title": "Game look better",
+   "requested_by": "@MathUnlockedYT",
+   "built_by": "mika",
+   "kind": "web_game",
+   "url": "https://randomsci.github.io/mika-generated-games/games/game-look-better-fabe/",
+   "published_at": 1790948346,
+   "has_thumbnail": true
+  },
+  {
    "job_id": "a67e0668e848",
    "slug": "galaxy-related-game-using-html-css-j-fe78",
    "title": "Galaxy related game using HTML, CSS, and JS",
