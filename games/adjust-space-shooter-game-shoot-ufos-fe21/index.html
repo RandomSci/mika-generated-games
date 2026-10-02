@@ -2,7 +2,7 @@
 <html>
 <head><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' data: blob:; connect-src 'self'; font-src 'self' data:; worker-src 'self' blob:; object-src 'none'; base-uri 'none'; form-action 'none'">
 <meta charset="utf-8">
-<title>Star Patrol</title>
+<title>Snake Patrol</title>
 <style>
   :root {
     --night: #0f1d3a;
@@ -27,7 +27,7 @@
 <script>
 // ===== SETTINGS: change these first =====
 const SETTINGS = {
-  title: "Star Patrol",
+  title: "Snake Patrol",
   player: "../../assets/sprites/ship.svg",
   playerHeight: 120,
   enemies: [
@@ -77,18 +77,15 @@ class Play extends Phaser.Scene {
       tint: [0xffb55e, 0xff6f9c, 0x9cc2ff, 0xffffff], blendMode: "ADD", emitting: false,
     }).setDepth(8);
 
-    this.shots = []; this.enemies = []; this.pickups = []; 
+    this.snake = [{ x: 960, y: 900 }];
     this.score = 0; this.lives = SETTINGS.lives; this.wave = 1; 
-    this.fireTimer = 0; this.spawnTimer = 1.2; this.invincible = 0; this.targetX = 960;
+    this.spawnTimer = 1.2; this.targetX = 960; this.addCoin();
 
     const font = "Nunito, Quicksand, 'Segoe UI', system-ui, sans-serif";
     this.scoreText = this.add.text(60, 40, "0", {
       fontFamily: font, fontSize: "72px", fontStyle: "900", color: "#f4ead8",
     }).setShadow(0, 0, "#ffb55e", 20, true, true).setDepth(10);
     
-    this.waveText = this.add.text(1860, 52, "wave 1", {
-      fontFamily: font, fontSize: "40px", color: "#9cc2ff",
-    }).setOrigin(1, 0).setDepth(10);
     this.hearts = []; this.drawLives();
     
     const title = this.add.text(960, 440, SETTINGS.title, {
@@ -96,6 +93,11 @@ class Play extends Phaser.Scene {
     }).setOrigin(0.5).setShadow(0, 0, "#ff6f9c", 30, true, true).setDepth(10);
     
     this.tweens.add({ targets: title, alpha: 0, y: 380, delay: 1600, duration: 900 });
+  }
+
+  addCoin() {
+    const coin = this.add.image(Phaser.Math.Between(100, 1820), Phaser.Math.Between(100, 800), "coin").setDepth(4);
+    this.coin = coin;
   }
 
   drawLives() {
@@ -106,134 +108,49 @@ class Play extends Phaser.Scene {
     }
   }
 
-  spawnEnemy() {
-    const pool = SETTINGS.enemies.filter((e, i) => i < 2 || this.wave > 1);
-    const type = Phaser.Utils.Array.GetRandom(pool);
-    
-    const sprite = this.add.image(Phaser.Math.Between(120, 1800), -80, type.key).setDepth(3);
-    this.enemies.push({
-      sprite, hp: type.hp, points: type.points, r: type.size * 0.42,
-      vx: Phaser.Math.Between(-80, 80), vy: Phaser.Math.Between(180, 300) + this.wave * 20,
-      spin: Phaser.Math.Between(-90, 90),
-    });
-  }
-
-  autopilot() {
-    const px = this.player.x;
-    const danger = this.enemies.find((e) =>
-      e.sprite.y > 560 && e.sprite.y < 880 && Math.abs(e.sprite.x - px) < e.r + 70
-    );
-    if (danger && Math.random() < SETTINGS.skill) {
-      this.targetX = danger.sprite.x > px ? px - 260 : px + 260;
-    } else {
-      const prey = this.enemies.filter((e) => e.sprite.y > 0 && e.sprite.y < 700)
-        .sort((a, b) => b.sprite.y - a.sprite.y)[0];
-      if (prey) this.targetX = prey.sprite.x;
-    }
-    this.targetX = Phaser.Math.Clamp(this.targetX, 100, 1820);
-  }
-
-  hit(enemy) {
-    this.explosion.emitParticleAt(enemy.sprite.x, enemy.sprite.y, 26);
-    this.cameras.main.shake(120, 0.004);
-    this.score += enemy.points;
-    this.scoreText.setText(String(this.score));
-    if (Math.random() < 0.25) {
-      const coin = this.add.image(enemy.sprite.x, enemy.sprite.y, "coin").setDepth(4);
-      this.pickups.push(coin);
-    }
-    enemy.sprite.destroy(); enemy.dead = true;
-    if (this.score >= this.wave * 200) {
-      this.wave += 1; this.waveText.setText("wave " + this.wave);
-      this.cameras.main.flash(250, 156, 194, 255);
-    }
-  }
-
-  playerHit() {
-    if (this.invincible > 0) return;
-    this.lives -= 1; this.invincible = 2; this.drawLives();
-    this.cameras.main.shake(400, 0.014);
-    this.explosion.emitParticleAt(this.player.x, this.player.y, 50);
-    this.tweens.add({ targets: this.player, alpha: 0.2, yoyo: true, repeat: 7, duration: 120 });
-    if (this.lives <= 0) this.time.delayedCall(900, () => this.scene.restart());
-  }
-
   update(_time, deltaMs) {
     const dt = Math.min(deltaMs / 1000, 0.05);
     for (const image of this.bg) {
       image.y += 40 * dt;
       if (image.y >= 1080) image.y -= 2160;
     }
-    this.invincible = Math.max(0, this.invincible - dt);
 
-    this.autopilot();
     this.player.x += (this.targetX - this.player.x) * Math.min(1, 6 * dt);
     this.player.angle = (this.targetX - this.player.x) * 0.03;
-
-    this.fireTimer -= dt;
-    if (this.fireTimer <= 0) {
-      this.fireTimer = SETTINGS.fireEvery;
-      this.shots.push(this.add.image(this.player.x, this.player.y - 70, "laser").setDepth(4).setBlendMode("ADD"));
-    }
-    this.spawnTimer -= dt;
-    if (this.spawnTimer <= 0) {
-      this.spawnEnemy();
-      this.spawnTimer = Math.max(0.25, SETTINGS.spawnEvery - this.wave * 0.05);
+    
+    // Move the snake
+    for (let i = this.snake.length - 1; i > 0; i--) {
+      this.snake[i] = { ...this.snake[i - 1] };
     }
 
-    for (const shot of this.shots) { 
-      shot.prevY = shot.y; 
-      shot.y -= 1400 * dt; 
+    this.snake[0].y -= 200 * dt; // Move snake up
+    
+    // Check for coin collection
+    if (Phaser.Math.Distance.Between(this.snake[0].x, this.snake[0].y, this.coin.x, this.coin.y) < 40) {
+      this.score += 25;
+      this.scoreText.setText(String(this.score));
+      this.explosion.emitParticleAt(this.coin.x, this.coin.y, 12);
+      this.coin.destroy();
+      this.addCoin();
+      
+      // Grow the snake
+      this.snake.push({ ...this.snake[this.snake.length - 1] });
     }
 
-    for (const e of this.enemies) {
-      e.sprite.x += e.vx * dt; 
-      e.sprite.y += e.vy * dt; 
-      e.sprite.angle += e.spin * dt;
-
-      if (e.sprite.x < 90 || e.sprite.x > 1830) e.vx = -e.vx;
-      for (const shot of this.shots) {
-        const crossed = e.sprite.y + e.r > shot.y && e.sprite.y - e.r < shot.prevY;
-        if (!shot.used && Math.abs(shot.x - e.sprite.x) < e.r && crossed) {
-          shot.used = true; 
-          e.hp -= 1; 
-          e.sprite.setTintFill(0xffffff);
-          this.time.delayedCall(60, () => e.sprite.active && e.sprite.clearTint());
-          if (e.hp <= 0) { this.hit(e); break; }
-        }
+    // Draw snake segments with growing body effect
+    this.snake.forEach((segment, index) => {
+      const snakePart = this.add.image(segment.x, segment.y, "player").setDepth(5);
+      snakePart.setScale(SETTINGS.playerHeight / snakePart.height);
+      if (index > 0) {
+        snakePart.setAlpha(1 - (index / this.snake.length));
       }
-      if (!e.dead && Phaser.Math.Distance.Between(e.sprite.x, e.sprite.y, this.player.x, this.player.y) < e.r + 40) {
-        this.hit(e); 
-        this.playerHit(); 
-      }
+    });
+    
+    if (this.snake[0].y < 0) { // Reset game over condition if the snake goes off the top
+      this.score = 0; 
+      this.drawLives(); 
+      this.snake = [{ x: 960, y: 900 }];
     }
-
-    for (const coin of this.pickups) {
-      coin.y += 220 * dt; 
-      coin.angle += 180 * dt;
-      if (Phaser.Math.Distance.Between(coin.x, coin.y, this.player.x, this.player.y) < 80) {
-        coin.used = true; 
-        this.score += 25; 
-        this.scoreText.setText(String(this.score)); 
-        this.explosion.emitParticleAt(coin.x, coin.y, 12); 
-        coin.destroy(); 
-      }
-    }
-
-    this.shots = this.shots.filter((s) => {
-      if (s.used || s.y < -60) { s.destroy(); return false; }
-      return true;
-    });
-    this.enemies = this.enemies.filter((e) => {
-      if (e.dead) return false;
-      if (e.sprite.y > 1200) { e.sprite.destroy(); return false; }
-      return true;
-    });
-    this.pickups = this.pickups.filter((c) => {
-      if (c.used) return false;
-      if (c.y > 1150) { c.destroy(); return false; }
-      return true;
-    });
   }
 }
 
