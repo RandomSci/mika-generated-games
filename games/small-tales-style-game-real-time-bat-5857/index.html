@@ -1,0 +1,199 @@
+<!doctype html>
+<html>
+<head><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' data: blob:; connect-src 'self'; font-src 'self' data:; worker-src 'self' blob:; object-src 'none'; base-uri 'none'; form-action 'none'"><script>window.GAME_MODE=/[?&]demo\b/.test(location.search)?"stream":"player";</script><!--vr-rescue--><script>(function(){var a=EventTarget.prototype.addEventListener;EventTarget.prototype.addEventListener=function(t,f,o){if(/^(click|pointerdown|pointerup|mousedown|mouseup|touchstart|touchend|submit)$/.test(t)){try{this.__vrClick=true}catch(e){}}return a.call(this,t,f,o)};})();</script><!--/vr-rescue-->
+<meta charset="utf-8">
+<title>Tales of Adventure</title>
+<style>
+  :root {
+    --night: #0f1d3a;
+    --dusk:  #2a4a86;
+    --glass: #9cc2ff;
+    --lamp:  #ffb55e;
+    --paint: #ff6f9c;
+    --mint:  #5fe3c8;
+    --paper: #f4ead8;
+  }
+  html, body { margin: 0; height: 100%; overflow: hidden; background: linear-gradient(to bottom, var(--night), var(--dusk)); }
+</style>
+<script src="../../libs/phaser/3.90.0/phaser.min.js"></script>
+</head>
+<body>
+<script>
+// ===== SETTINGS =====
+const SETTINGS = {
+  title: "Tales of Adventure",
+  players: [
+    { name: "Hero", image: "../../assets/generated/art-1790961204-7f21a0.png", color: 0xffb55e, speed: 430 }, // Player character
+    { name: "Mika", image: "../../assets/characters/mika-head.png", color: 0xffb55e, speed: 410 },
+    { name: "Luna", image: "../../assets/characters/luna-head.png", color: 0x9cc2ff, speed: 410 },
+  ],
+  playerSize: 120, // on-screen height of each player
+  enemies: 4,      // slimes as enemies
+  enemySpeed: 220,
+  roundSeconds: 30, // a new round starts after this
+  background: "../../assets/backgrounds/night-sky.svg",
+};
+
+// The Stage plays the game by itself; the published page is played by a person.
+const PLAYER = window.GAME_MODE === "player";
+
+const W = 1920, H = 1080, FONT = "Nunito, Quicksand, 'Segoe UI', system-ui, sans-serif";
+
+class Play extends Phaser.Scene {
+  constructor() { super("play"); }
+
+  preload() {
+    const svg = (key, url, w, h) => this.load.svg(key, url, { width: w, height: h });
+    svg("bg", SETTINGS.background, W, H);
+    SETTINGS.players.forEach((p, i) => this.load.image("player" + i, p.image));
+    this.load.image("slime", "../../assets/sprites/slime.svg");
+  }
+
+  create() {
+    this.add.image(0, 0, "bg").setOrigin(0, 0);
+    this.players = SETTINGS.players.map((p, i) => {
+      const sprite = this.add.image(500 + i * 600, 600, "player" + i).setDepth(5);
+      sprite.setScale(SETTINGS.playerSize / sprite.height);
+      return { ...p, sprite, vx: 0, vy: 0 };
+    });
+
+    this.enemies = [];
+    for (let i = 0; i < SETTINGS.enemies; i++) this.addEnemy();
+
+    this.roundLeft = SETTINGS.roundSeconds;
+    this.timerText = this.add.text(W - 140, 70, "", {
+      fontFamily: FONT, fontSize: "48px", fontStyle: "800", color: "#9cc2ff",
+    }).setOrigin(1, 0).setDepth(10);
+  }
+
+  addEnemy() {
+    const slime = this.add.image(Phaser.Math.Between(200, W - 200), Phaser.Math.Between(200, H - 200), "slime").setDepth(4);
+    slime.speed = SETTINGS.enemySpeed;
+    this.enemies.push(slime);
+  }
+
+  update(_time, deltaMs) {
+    const dt = deltaMs / 1000;
+
+    this.roundLeft -= dt;
+    this.timerText.setText(Math.ceil(Math.max(0, this.roundLeft)) + "s");
+
+    if (this.roundLeft <= 0) this.roundLeft = SETTINGS.roundSeconds; // Restart round
+
+    for (const p of this.players) {
+      if (PLAYER && p === this.players[0]) {
+        this.control(p, dt); // Player control
+      } else {
+        this.steer(p, dt); // AI control
+      }
+    }
+
+    for (const e of this.enemies) {
+      e.x += Phaser.Math.FloatBetween(-e.speed, e.speed) * dt;
+      e.y += Phaser.Math.FloatBetween(-e.speed, e.speed) * dt;
+      e.x = Phaser.Math.Clamp(e.x, 0, W);
+      e.y = Phaser.Math.Clamp(e.y, 0, H);
+    }
+  }
+
+  control(p, dt) {
+    const cursorKeys = this.input.keyboard.createCursorKeys();
+    p.vx = 0; p.vy = 0;
+    if (cursorKeys.left.isDown) p.vx = -p.speed;
+    if (cursorKeys.right.isDown) p.vx = p.speed;
+    if (cursorKeys.up.isDown) p.vy = -p.speed;
+    if (cursorKeys.down.isDown) p.vy = p.speed;
+
+    p.sprite.x += p.vx * dt;
+    p.sprite.y += p.vy * dt;
+    p.sprite.x = Phaser.Math.Clamp(p.sprite.x, 0, W);
+    p.sprite.y = Phaser.Math.Clamp(p.sprite.y, 0, H);
+  }
+
+  steer(p, dt) {
+    // Simple AI to steer towards a random direction
+    const direction = Phaser.Math.FloatBetween(0, Math.PI * 2);
+    p.sprite.x += Math.cos(direction) * p.speed * dt;
+    p.sprite.y += Math.sin(direction) * p.speed * dt;
+  }
+}
+
+// Game initialization
+new Phaser.Game({
+  type: Phaser.AUTO,
+  width: W,
+  height: H,
+  backgroundColor: "#0b1530",
+  scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_BOTH },
+  scene: Play,
+});
+</script>
+<!--vr-rescue--><script>
+window.addEventListener("load", function () { setTimeout(function () {
+  if (window.__vrClick || document.__vrClick || window.onclick || document.onclick) return;
+  function handled(el) {
+    for (var n = el; n && n !== document; n = n.parentNode)
+      if (n.__vrClick || n.onclick || (n.getAttribute && n.getAttribute("onclick"))) return true;
+    return false;
+  }
+  var words = ["contact", "work", "project", "portfolio", "service", "pricing", "price", "plan",
+    "about", "team", "feature", "faq", "menu", "book", "start", "home"];
+  var sections = Array.prototype.filter.call(document.querySelectorAll("[id]"), function (e) {
+    return e.offsetHeight > 60 && e.tagName !== "svg" && !(e.closest && e.closest("svg"));
+  });
+  function sectionFor(label) {
+    label = (label || "").toLowerCase();
+    for (var i = 0; i < words.length; i++) {
+      if (label.indexOf(words[i]) === -1) continue;
+      var w = words[i] === "book" || words[i] === "start" ? "contact" : words[i];
+      for (var j = 0; j < sections.length; j++) {
+        var s = sections[j], h = s.querySelector("h1,h2,h3");
+        if (s.id.toLowerCase().indexOf(w) !== -1 || (h && h.textContent.toLowerCase().indexOf(w) !== -1)) return s;
+      }
+    }
+    return null;
+  }
+  var note;
+  function demo() {
+    if (!note) {
+      note = document.createElement("div");
+      note.textContent = "Thanks! This page was built live on stream by Mika and Luna, so this button is a demo.";
+      note.style.cssText = "position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:99999;" +
+        "max-width:90vw;padding:12px 18px;border-radius:12px;background:#111827;color:#fff;" +
+        "font:600 15px system-ui,sans-serif;box-shadow:0 10px 30px rgba(0,0,0,.35);transition:opacity .3s";
+      document.body.appendChild(note);
+    }
+    note.style.opacity = "1";
+    clearTimeout(note.t); note.t = setTimeout(function () { note.style.opacity = "0"; }, 2600);
+  }
+  function rescue(el) {
+    el.addEventListener("click", function (e) {
+      e.preventDefault();
+      var s = sectionFor(el.textContent);
+      if (s) s.scrollIntoView({ behavior: "smooth", block: "start" }); else demo();
+    });
+  }
+  Array.prototype.forEach.call(document.querySelectorAll("a"), function (a) {
+    var href = (a.getAttribute("href") || "").trim();
+    if (href.charAt(0) === "#" && href.length > 1) {
+      var id = href.slice(1); try { id = decodeURIComponent(id); } catch (e) {}
+      if (document.getElementById(id)) return;
+    } else if (href && href !== "#" && !/^javascript:/i.test(href)) return;
+    if (!handled(a)) rescue(a);
+  });
+  Array.prototype.forEach.call(document.querySelectorAll("form"), function (f) {
+    if (!handled(f) && !f.onsubmit) f.addEventListener("submit", function (e) { e.preventDefault(); demo(); });
+  });
+  Array.prototype.forEach.call(document.querySelectorAll("button, [role=button], input[type=button]"), function (b) {
+    if (b.disabled || b.form || handled(b)) return;
+    rescue(b);
+  });
+  // Things styled as buttons that are not real buttons (a <span class="cta">).
+  Array.prototype.forEach.call(document.querySelectorAll("[class*=btn],[class*=button],[class*=cta]"), function (b) {
+    if (/^(A|BUTTON|INPUT|BODY|HTML)$/.test(b.tagName) || b.querySelector("a,button") || handled(b)) return;
+    b.style.cursor = "pointer";
+    rescue(b);
+  });
+}, 300); });
+</script><!--/vr-rescue--></body>
+</html>

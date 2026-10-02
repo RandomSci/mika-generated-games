@@ -2,6 +2,17 @@
  "title": "Games built live by Mika and Luna",
  "games": [
   {
+   "job_id": "1bcc20f89e1b",
+   "slug": "small-tales-style-game-real-time-bat-5857",
+   "title": "Small Tales of style game with a real-time battle system",
+   "requested_by": "@MagicMisa",
+   "built_by": "mika",
+   "kind": "web_game",
+   "url": "https://randomsci.github.io/mika-generated-games/games/small-tales-style-game-real-time-bat-5857/",
+   "published_at": 1790961233,
+   "has_thumbnail": true
+  },
+  {
    "job_id": "90be4d08b630",
    "slug": "website-instead-game-f6df",
    "title": "Website instead of the game",
