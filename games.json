@@ -2,6 +2,17 @@
  "title": "Games built live by Mika and Luna",
  "games": [
   {
+   "job_id": "90be4d08b630",
+   "slug": "website-instead-game-f6df",
+   "title": "Website instead of the game",
+   "requested_by": "@FRCFinance",
+   "built_by": "mika",
+   "kind": "web_site",
+   "url": "https://randomsci.github.io/mika-generated-games/games/website-instead-game-f6df/",
+   "published_at": 1790958258,
+   "has_thumbnail": true
+  },
+  {
    "job_id": "98c5b4932434",
    "slug": "use-crying-cat-image-as-character-in-a2ed",
    "title": "Use the crying cat image as a character in the cat and mouse game",

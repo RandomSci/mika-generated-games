@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+<head><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' data: blob:; connect-src 'self'; font-src 'self' data:; worker-src 'self' blob:; object-src 'none'; base-uri 'none'; form-action 'none'"><script>window.GAME_MODE=/[?&]demo\b/.test(location.search)?"stream":"player";</script><!--vr-rescue--><script>(function(){var a=EventTarget.prototype.addEventListener;EventTarget.prototype.addEventListener=function(t,f,o){if(/^(click|pointerdown|pointerup|mousedown|mouseup|touchstart|touchend|submit)$/.test(t)){try{this.__vrClick=true}catch(e){}}return a.call(this,t,f,o)};})();</script><!--/vr-rescue-->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FRCFinance</title>
+<style>
+  :root { --night: #0f1d3a; --deep: #0b1530; --dusk: #2a4a86; --glass: #9cc2ff;
+          --lamp: #ffb55e; --paint: #ff6f9c; --mint: #5fe3c8; --paper: #f4ead8;
+          --muted: rgba(244, 234, 216, 0.68); --line: rgba(156, 194, 255, 0.16);
+          --radius: 22px; --pad: clamp(20px, 6vw, 96px); }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: auto; }
+  body { margin: 0; background: linear-gradient(var(--deep), var(--night) 30%, #16295a 70%, var(--deep));
+         color: var(--paper); font-family: Nunito, Quicksand, "Avenir Next", "Segoe UI", system-ui, sans-serif;
+         font-size: clamp(16px, 1.25vw, 22px); line-height: 1.55; }
+  a { color: inherit; text-decoration: none; }
+  section { padding: clamp(56px, 11vh, 140px) var(--pad); position: relative; }
+  h1, h2, h3 { margin: 0; line-height: 1.05; letter-spacing: -0.02em; }
+  h2 { font-size: clamp(32px, 4vw, 68px); font-weight: 900; margin-bottom: 0.4em; }
+  .kicker { color: var(--lamp); font-weight: 800; letter-spacing: 0.04em; margin-bottom: 0.6em; }
+  .lead { color: var(--muted); max-width: 42ch; font-size: 1.15em; }
+
+  nav { position: sticky; top: 0; z-index: 10; display: flex; align-items: center; gap: 2vw;
+        padding: 14px var(--pad); background: rgba(11, 21, 48, 0.72); backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--line); }
+  .brand { font-weight: 900; font-size: 1.25em; display: flex; align-items: center; gap: 10px; }
+  .brand i { width: 14px; height: 14px; border-radius: 50%; background: var(--lamp);
+             box-shadow: 0 0 18px var(--lamp); }
+  nav .links { margin-left: auto; display: flex; gap: clamp(10px, 2vw, 32px); }
+  nav .links a { color: var(--muted); font-weight: 700; padding: 6px 2px; border-bottom: 2px solid transparent;
+                 transition: color 0.4s, border-color 0.4s; }
+  nav .links a.active { color: var(--paper); border-color: var(--lamp); }
+
+  .btn { display: inline-block; padding: 0.8em 1.5em; border-radius: 999px; font-weight: 800;
+         background: var(--lamp); color: var(--night); transition: transform 0.35s, box-shadow 0.35s; }
+  .btn.ghost { background: transparent; color: var(--paper); border: 2px solid var(--line); }
+  .btn:hover, .btn.hover { transform: translateY(-3px) scale(1.04); box-shadow: 0 12px 40px rgba(255, 181, 94, 0.35); }
+  .card { padding: clamp(20px, 2.2vw, 34px); border-radius: var(--radius); background: rgba(42, 74, 134, 0.28);
+          border: 1px solid var(--line); transition: transform 0.45s, border-color 0.45s, background 0.45s; }
+  .card:hover, .card.hover { transform: translateY(-6px); border-color: rgba(255, 181, 94, 0.6);
+                             background: rgba(255, 181, 94, 0.1); }
+  .card h3 { font-size: 1.35em; margin: 0.5em 0 0.3em; }
+  .card p { margin: 0; color: var(--muted); }
+  .icon { width: 48px; height: 48px; border-radius: 14px; display: grid; place-items: center;
+          font-weight: 900; color: var(--night); }
+
+  .hero { min-height: calc(100vh - 64px); display: grid; grid-template-columns: 1.1fr 1fr;
+          align-items: center; gap: 4vw; }
+  .hero h1 { font-size: clamp(44px, 6.4vw, 120px); font-weight: 900; }
+  .hero h1 span { color: var(--lamp); text-shadow: 0 0 40px rgba(255, 181, 94, 0.45); }
+  .hero .actions { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 1.6em; }
+  .flow { width: 100%; height: auto; filter: drop-shadow(0 0 30px rgba(156, 194, 255, 0.2)); }
+
+  .grid { display: grid; gap: clamp(14px, 1.6vw, 26px); grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
+  .steps { counter-reset: step; }
+  .steps .card::before { counter-increment: step; content: counter(step); display: inline-grid; place-items: center;
+                         width: 40px; height: 40px; border-radius: 50%; background: var(--dusk); font-weight: 900; }
+  .stats { display: flex; gap: 4vw; flex-wrap: wrap; margin-top: 1.5em; }
+  .stats b { display: block; font-size: clamp(30px, 3.4vw, 58px); color: var(--mint); }
+  .contact { text-align: center; }
+  .contact .lead { margin: 0 auto 1.4em; }
+  footer { padding: 28px var(--pad); color: var(--muted); border-top: 1px solid var(--line);
+           display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.8s, transform 0.8s cubic-bezier(.2,.8,.2,1); }
+  .reveal.in { opacity: 1; transform: none; }
+  .grid .reveal:nth-child(2) { transition-delay: 0.12s; } .grid .reveal:nth-child(3) { transition-delay: 0.24s; }
+  .grid .reveal:nth-child(4) { transition-delay: 0.36s; }
+
+  #cursor { position: fixed; left: 0; top: 0; width: 22px; height: 22px; z-index: 50; pointer-events: none;
+            border-radius: 50%; background: rgba(244, 234, 216, 0.9); box-shadow: 0 0 0 6px rgba(244, 234, 216, 0.18);
+            transition: transform 0.9s cubic-bezier(.45,0,.25,1); }
+
+  @media (max-width: 760px) {
+    .hero { grid-template-columns: 1fr; }
+    nav .links { display: none; }
+  }
+
+  /* Animation styles */
+  .animate {
+      animation: float 3s ease-in-out infinite;
+  }
+
+  @keyframes float {
+      0%, 100% { transform: translatey(0); }
+      50% { transform: translatey(-10px); }
+  }
+</style>
+</head>
+<body>
+<nav>
+  <div class="brand"><i></i>FRCFinance</div>
+  <div class="links">
+    <a href="#home">Home</a><a href="#services">Services</a><a href="#work">Work</a>
+    <a href="#process">Process</a><a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<section class="hero" id="home" data-tour>
+  <div>
+    <div class="kicker reveal">Finance Solutions</div>
+    <h1 class="reveal">Boost Your Financial Efficiency.<br><span>Let's get started.</span></h1>
+    <p class="lead reveal">We provide innovative solutions to streamline your financial processes and save you time.</p>
+    <div class="actions reveal">
+      <a class="btn" href="#contact" data-hover>Contact Us</a>
+      <a class="btn ghost" href="#work" data-hover>Our Work</a>
+    </div>
+  </div>
+</section>
+
+<section id="services" data-tour>
+  <div class="kicker reveal">Services</div>
+  <h2 class="reveal">What We Offer</h2>
+  <div class="grid">
+    <div class="card reveal" data-hover><div class="icon" style="background: var(--lamp)">📊</div><h3>Financial Reporting</h3><p>Comprehensive reports for insightful decision making.</p></div>
+    <div class="card reveal" data-hover><div class="icon" style="background: var(--paint)">💼</div><h3>Tax Services</h3><p>Expert advice and submissions ensuring compliance.</p></div>
+    <div class="card reveal" data-hover><div class="icon" style="background: var(--mint)">📈</div><h3>Investment Strategies</h3><p>Tailored strategies to maximize your investment returns.</p></div>
+  </div>
+</section>
+
+<section id="work" data-tour>
+  <div class="kicker reveal">Work</div>
+  <h2 class="reveal">Recent Projects</h2>
+  <div class="grid">
+    <div class="card reveal" data-hover><h3>Startup Financial Health</h3><p>Helped startups optimize their financial strategies.</p></div>
+    <div class="card reveal" data-hover><h3>Tax Efficiency Program</h3><p>Developed tax-saving programs for small businesses.</p></div>
+    <div class="card reveal" data-hover><h3>Portfolio Management</h3><p>Managed investment portfolios for clients, ensuring returns.</p></div>
+  </div>
+  <div class="stats reveal"><div><b>300+</b> clients served</div><div><b>200 h</b> saved a month</div><div><b>24/7</b> support available</div></div>
+</section>
+
+<section id="process" data-tour>
+  <div class="kicker reveal">Process</div>
+  <h2 class="reveal">How We Work</h2>
+  <div class="grid steps">
+    <div class="card reveal" data-hover><h3>Consult</h3><p>Understanding your needs and challenges.</p></div>
+    <div class="card reveal" data-hover><h3>Design</h3><p>Creating tailored solutions for your finances.</p></div>
+    <div class="card reveal" data-hover><h3>Implement</h3><p>Putting the solutions into practice effectively.</p></div>
+    <div class="card reveal" data-hover><h3>Review</h3><p>Ongoing assessment to improve efficiency.</p></div>
+  </div>
+</section>
+
+<section class="contact" id="contact" data-tour>
+  <h2 class="reveal">Ready to transform your finance?</h2>
+  <p class="lead reveal">Reach out for a consultation and let's automate your financial processes.</p>
+  <a class="btn reveal" href="#contact" data-hover data-demo>Start a project</a>
+  <p class="lead" id="demo-note" hidden>Thanks! This site was built live on stream, so this button is a demo.</p>
+</section>
+
+<footer><span>© FRCFinance</span><span>Made live on stream</span></footer>
+<div id="cursor"></div>
+
+<script>
+// ===== BUTTONS: every button does something real =====
+document.querySelectorAll("[data-demo]").forEach((el) => el.addEventListener("click", (e) => {
+  e.preventDefault();
+  document.getElementById("demo-note").hidden = false;
+}));
+
+// ===== SETTINGS =====
+const SETTINGS = {
+  scrollMs: 1400,
+  dwellMs: 2600,
+  hoverMs: 1100,
+  maxHovers: 3,
+};
+
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+
+// Reveal elements as they come into view.
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add("in"); });
+}, { threshold: 0.15 });
+document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
+
+// Smooth scroll that we control.
+function scrollToY(target) {
+  const start = scrollY, change = target - start, began = performance.now();
+  return new Promise((done) => {
+    function step(now) {
+      const t = Math.min(1, (now - began) / SETTINGS.scrollMs);
+      scrollTo(0, start + change * ease(t));
+      t < 1 ? requestAnimationFrame(step) : done();
+    }
+    requestAnimationFrame(step);
+  });
+}
+
+// The stream cursor: glides to buttons and cards and "hovers" them.
+const cursor = document.getElementById("cursor");
+function moveCursor(x, y) { cursor.style.transform = `translate(${x - 11}px, ${y - 11}px)`; }
+moveCursor(innerWidth * 0.7, innerHeight * 0.6);
+
+// Animate the hero section
+const heroSection = document.querySelector('.hero');
+heroSection.classList.add('animate');
+
+async function hoverIn(section) {
+  const targets = [...section.querySelectorAll("[data-hover]")].slice(0, SETTINGS.maxHovers);
+  for (const el of targets) {
+    const r = el.getBoundingClientRect();
+    if (r.bottom < 0 || r.top > innerHeight) continue;
+    moveCursor(r.left + r.width * 0.55, r.top + r.height * 0.55);
+    await wait(700);
+    el.classList.add("hover");
+    await wait(SETTINGS.hoverMs);
+    el.classList.remove("hover");
+  }
+}
+
+// Highlight the menu link for the section on screen.
+const links = [...document.querySelectorAll("nav .links a")];
+function markActive(id) {
+  links.forEach((a) => a.classList.toggle("active", a.getAttribute("href") === "#" + id));
+}
+
+// The tour: every section in order, then back to the top, forever.
+async function tour() {
+  const sections = [...document.querySelectorAll("[data-tour]")];
+  const navHeight = document.querySelector("nav").offsetHeight;
+  while (true) {
+    for (const section of sections) {
+      markActive(section.id);
+      const top = section.getBoundingClientRect().top + scrollY - navHeight;
+      await scrollToY(Math.max(0, top));
+      await hoverIn(section);
+      await wait(SETTINGS.dwellMs);
+    }
+    document.querySelectorAll(".reveal").forEach((el) => {
+      if (!el.closest("#home")) el.classList.remove("in");
+    });
+    await scrollToY(0);
+  }
+}
+setTimeout(tour, 900);
+</script>
+<!--vr-rescue--><script>
+window.addEventListener("load", function () { setTimeout(function () {
+  if (window.__vrClick || document.__vrClick || window.onclick || document.onclick) return;
+  function handled(el) {
+    for (var n = el; n && n !== document; n = n.parentNode)
+      if (n.__vrClick || n.onclick || (n.getAttribute && n.getAttribute("onclick"))) return true;
+    return false;
+  }
+  var words = ["contact", "work", "project", "portfolio", "service", "pricing", "price", "plan",
+    "about", "team", "feature", "faq", "menu", "book", "start", "home"];
+  var sections = Array.prototype.filter.call(document.querySelectorAll("[id]"), function (e) {
+    return e.offsetHeight > 60 && e.tagName !== "svg" && !(e.closest && e.closest("svg"));
+  });
+  function sectionFor(label) {
+    label = (label || "").toLowerCase();
+    for (var i = 0; i < words.length; i++) {
+      if (label.indexOf(words[i]) === -1) continue;
+      var w = words[i] === "book" || words[i] === "start" ? "contact" : words[i];
+      for (var j = 0; j < sections.length; j++) {
+        var s = sections[j], h = s.querySelector("h1,h2,h3");
+        if (s.id.toLowerCase().indexOf(w) !== -1 || (h && h.textContent.toLowerCase().indexOf(w) !== -1)) return s;
+      }
+    }
+    return null;
+  }
+  var note;
+  function demo() {
+    if (!note) {
+      note = document.createElement("div");
+      note.textContent = "Thanks! This page was built live on stream by Mika and Luna, so this button is a demo.";
+      note.style.cssText = "position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:99999;" +
+        "max-width:90vw;padding:12px 18px;border-radius:12px;background:#111827;color:#fff;" +
+        "font:600 15px system-ui,sans-serif;box-shadow:0 10px 30px rgba(0,0,0,.35);transition:opacity .3s";
+      document.body.appendChild(note);
+    }
+    note.style.opacity = "1";
+    clearTimeout(note.t); note.t = setTimeout(function () { note.style.opacity = "0"; }, 2600);
+  }
+  function rescue(el) {
+    el.addEventListener("click", function (e) {
+      e.preventDefault();
+      var s = sectionFor(el.textContent);
+      if (s) s.scrollIntoView({ behavior: "smooth", block: "start" }); else demo();
+    });
+  }
+  Array.prototype.forEach.call(document.querySelectorAll("a"), function (a) {
+    var href = (a.getAttribute("href") || "").trim();
+    if (href.charAt(0) === "#" && href.length > 1) {
+      var id = href.slice(1); try { id = decodeURIComponent(id); } catch (e) {}
+      if (document.getElementById(id)) return;
+    } else if (href && href !== "#" && !/^javascript:/i.test(href)) return;
+    if (!handled(a)) rescue(a);
+  });
+  Array.prototype.forEach.call(document.querySelectorAll("form"), function (f) {
+    if (!handled(f) && !f.onsubmit) f.addEventListener("submit", function (e) { e.preventDefault(); demo(); });
+  });
+  Array.prototype.forEach.call(document.querySelectorAll("button, [role=button], input[type=button]"), function (b) {
+    if (b.disabled || b.form || handled(b)) return;
+    rescue(b);
+  });
+  // Things styled as buttons that are not real buttons (a <span class="cta">).
+  Array.prototype.forEach.call(document.querySelectorAll("[class*=btn],[class*=button],[class*=cta]"), function (b) {
+    if (/^(A|BUTTON|INPUT|BODY|HTML)$/.test(b.tagName) || b.querySelector("a,button") || handled(b)) return;
+    b.style.cursor = "pointer";
+    rescue(b);
+  });
+}, 300); });
+</script><!--/vr-rescue--></body>
+</html>
