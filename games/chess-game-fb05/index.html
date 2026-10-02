@@ -1,0 +1,219 @@
+<!doctype html>
+<html>
+<head><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' data: blob:; connect-src 'self'; font-src 'self' data:; worker-src 'self' blob:; object-src 'none'; base-uri 'none'; form-action 'none'"><script>window.GAME_MODE=/[?&]demo\b/.test(location.search)?"stream":"player";</script><!--vr-rescue--><script>(function(){var a=EventTarget.prototype.addEventListener;EventTarget.prototype.addEventListener=function(t,f,o){if(/^(click|pointerdown|pointerup|mousedown|mouseup|touchstart|touchend|submit)$/.test(t)){try{this.__vrClick=true}catch(e){}}return a.call(this,t,f,o)};})();</script><!--/vr-rescue-->
+<meta charset="utf-8">
+<title>FRCFinance Chess</title>
+<style>
+  :root {
+    --night: #0f1d3a;
+    --dusk:  #2a4a86;
+    --glass: #9cc2ff;
+    --lamp:  #ffb55e;
+    --paint: #ff6f9c;
+    --mint:  #5fe3c8;
+    --paper: #f4ead8;
+  }
+  html, body { 
+    margin: 0; 
+    height: 100%; 
+    overflow: hidden; 
+    background: linear-gradient(var(--night), var(--dusk)); 
+    font-family: "Nunito", "Quicksand", "Segoe UI", system-ui, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  canvas { 
+    display: block; 
+  }
+</style>
+<script src="../../libs/phaser/3.90.0/phaser.min.js"></script>
+</head>
+<body>
+<script>
+// ===== SETTINGS: change these first =====
+const SETTINGS = {
+  title: "FRCFinance Chess",
+  playerColor: 0xffb55e,
+  enemyColor: 0xff6f9c,
+  boardSize: 8, // 8x8 chessboard
+  squareSize: 70, // Reduced size for fitting on screen
+};
+
+// The Stage plays the game by itself; the published page is played by a person.
+const PLAYER = window.GAME_MODE === "player";
+
+const W = 560, H = 560; // Adjusted height for fitting in viewport
+
+class Play extends Phaser.Scene {
+  constructor() { super("play"); }
+
+  preload() {
+    this.load.image("whitePiece", "../../assets/characters/mika-head.png");
+    this.load.image("blackPiece", "../../assets/characters/luna-head.png");
+  }
+
+  create() {
+    this.createBoard();
+    this.createPieces();
+    this.selectedPiece = null;
+    this.input.on('pointerdown', (pointer) => this.onClick(pointer));
+    this.tweens.add({
+      targets: this.pieces,
+      y: "+=5", // Slight upward movement for animation
+      duration: 500,
+      yoyo: true,
+      repeat: -1,
+      ease: "Sine.easeInOut"
+    });
+  }
+
+  createBoard() {
+    this.board = this.add.graphics();
+    this.board.lineStyle(1, 0xffffff, 1); // Thinner lines
+    for (let i = 0; i < SETTINGS.boardSize; i++) {
+      for (let j = 0; j < SETTINGS.boardSize; j++) {
+        if ((i + j) % 2 === 0) {
+          this.board.fillStyle(0xeeeeee, 1);
+        } else {
+          this.board.fillStyle(0xaaaaaa, 1);
+        }
+        this.board.fillRect(i * SETTINGS.squareSize, j * SETTINGS.squareSize, SETTINGS.squareSize, SETTINGS.squareSize);
+      }
+    }
+  }
+
+  createPieces() {
+    this.pieces = [];
+    for (let i = 0; i < SETTINGS.boardSize; i++) {
+      this.addPiece(i, 0, "whitePiece");
+      this.addPiece(i, 7, "blackPiece");
+    }
+  }
+
+  addPiece(x, y, key) {
+    const piece = this.add.image(x * SETTINGS.squareSize + SETTINGS.squareSize / 2, y * SETTINGS.squareSize + SETTINGS.squareSize / 2, key);
+    piece.setInteractive();
+    piece.setOrigin(0.5, 0.5);
+    piece.on('pointerdown', () => this.onPieceClick(piece));
+    this.pieces.push(piece);
+  }
+
+  onPieceClick(piece) {
+    if (PLAYER) {
+      if (this.selectedPiece) {
+        this.movePiece(piece); // Move selected piece to this position
+        this.selectedPiece.setTint(0xffffff); // Reset tint
+        this.selectedPiece = null;
+      } else {
+        this.selectedPiece = piece;
+        piece.setTint(0xffbbbb); // Highlight selected piece
+      }
+    }
+  }
+
+  movePiece(targetPiece) {
+    if (this.selectedPiece !== targetPiece) {
+      this.tweens.add({
+        targets: this.selectedPiece,
+        x: targetPiece.x,
+        y: targetPiece.y,
+        duration: 300,
+        ease: 'Power1',
+      });
+    }
+  }
+
+  onClick(pointer) {
+    if (!this.selectedPiece) {
+      this.input.once('pointerup', () => {
+        if (this.selectedPiece) {
+          this.selectedPiece.setTint(0xffffff); // Reset tint
+          this.selectedPiece = null;
+        }
+      });
+    }
+  }
+  
+  update() {
+    // AI or other updates can go here if needed
+  }
+}
+
+new Phaser.Game({
+  type: Phaser.AUTO,
+  width: W,
+  height: H,
+  backgroundColor: "#0b1530",
+  scene: Play,
+});
+</script>
+<!--vr-rescue--><script>
+window.addEventListener("load", function () { setTimeout(function () {
+  if (window.__vrClick || document.__vrClick || window.onclick || document.onclick) return;
+  function handled(el) {
+    for (var n = el; n && n !== document; n = n.parentNode)
+      if (n.__vrClick || n.onclick || (n.getAttribute && n.getAttribute("onclick"))) return true;
+    return false;
+  }
+  var words = ["contact", "work", "project", "portfolio", "service", "pricing", "price", "plan",
+    "about", "team", "feature", "faq", "menu", "book", "start", "home"];
+  var sections = Array.prototype.filter.call(document.querySelectorAll("[id]"), function (e) {
+    return e.offsetHeight > 60 && e.tagName !== "svg" && !(e.closest && e.closest("svg"));
+  });
+  function sectionFor(label) {
+    label = (label || "").toLowerCase();
+    for (var i = 0; i < words.length; i++) {
+      if (label.indexOf(words[i]) === -1) continue;
+      var w = words[i] === "book" || words[i] === "start" ? "contact" : words[i];
+      for (var j = 0; j < sections.length; j++) {
+        var s = sections[j], h = s.querySelector("h1,h2,h3");
+        if (s.id.toLowerCase().indexOf(w) !== -1 || (h && h.textContent.toLowerCase().indexOf(w) !== -1)) return s;
+      }
+    }
+    return null;
+  }
+  var note;
+  function demo() {
+    if (!note) {
+      note = document.createElement("div");
+      note.textContent = "Thanks! This page was built live on stream by Mika and Luna, so this button is a demo.";
+      note.style.cssText = "position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:99999;" +
+        "max-width:90vw;padding:12px 18px;border-radius:12px;background:#111827;color:#fff;" +
+        "font:600 15px system-ui,sans-serif;box-shadow:0 10px 30px rgba(0,0,0,.35);transition:opacity .3s";
+      document.body.appendChild(note);
+    }
+    note.style.opacity = "1";
+    clearTimeout(note.t); note.t = setTimeout(function () { note.style.opacity = "0"; }, 2600);
+  }
+  function rescue(el) {
+    el.addEventListener("click", function (e) {
+      e.preventDefault();
+      var s = sectionFor(el.textContent);
+      if (s) s.scrollIntoView({ behavior: "smooth", block: "start" }); else demo();
+    });
+  }
+  Array.prototype.forEach.call(document.querySelectorAll("a"), function (a) {
+    var href = (a.getAttribute("href") || "").trim();
+    if (href.charAt(0) === "#" && href.length > 1) {
+      var id = href.slice(1); try { id = decodeURIComponent(id); } catch (e) {}
+      if (document.getElementById(id)) return;
+    } else if (href && href !== "#" && !/^javascript:/i.test(href)) return;
+    if (!handled(a)) rescue(a);
+  });
+  Array.prototype.forEach.call(document.querySelectorAll("form"), function (f) {
+    if (!handled(f) && !f.onsubmit) f.addEventListener("submit", function (e) { e.preventDefault(); demo(); });
+  });
+  Array.prototype.forEach.call(document.querySelectorAll("button, [role=button], input[type=button]"), function (b) {
+    if (b.disabled || b.form || handled(b)) return;
+    rescue(b);
+  });
+  // Things styled as buttons that are not real buttons (a <span class="cta">).
+  Array.prototype.forEach.call(document.querySelectorAll("[class*=btn],[class*=button],[class*=cta]"), function (b) {
+    if (/^(A|BUTTON|INPUT|BODY|HTML)$/.test(b.tagName) || b.querySelector("a,button") || handled(b)) return;
+    b.style.cursor = "pointer";
+    rescue(b);
+  });
+}, 300); });
+</script><!--/vr-rescue--></body>
+</html>

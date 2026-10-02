@@ -2,6 +2,17 @@
  "title": "Games built live by Mika and Luna",
  "games": [
   {
+   "job_id": "052825468bc5",
+   "slug": "chess-game-fb05",
+   "title": "Chess game",
+   "requested_by": "@FRCFinance",
+   "built_by": "mika",
+   "kind": "web_game",
+   "url": "https://randomsci.github.io/mika-generated-games/games/chess-game-fb05/",
+   "published_at": 1790962759,
+   "has_thumbnail": true
+  },
+  {
    "job_id": "1bcc20f89e1b",
    "slug": "small-tales-style-game-real-time-bat-5857",
    "title": "Small Tales of style game with a real-time battle system",
