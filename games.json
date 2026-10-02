@@ -2,6 +2,17 @@
  "title": "Games built live by Mika and Luna",
  "games": [
   {
+   "job_id": "c2e06d5d9654",
+   "slug": "space-shooting-game-3f76",
+   "title": "Space shooting game",
+   "requested_by": "@MathUnlockedYT",
+   "built_by": "luna",
+   "kind": "web_game_shooter",
+   "url": "https://randomsci.github.io/mika-generated-games/games/space-shooting-game-3f76/",
+   "published_at": 1790942140,
+   "has_thumbnail": true
+  },
+  {
    "job_id": "d50d70745a29",
    "slug": "flappy-bird-game-luna-bird-tap-or-sp-f727",
    "title": "Flappy bird game where Luna is the bird and tap or space to jump",
