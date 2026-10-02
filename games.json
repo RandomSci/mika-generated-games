@@ -2,6 +2,17 @@
  "title": "Games built live by Mika and Luna",
  "games": [
   {
+   "job_id": "2212fcb61ced",
+   "slug": "starting-new-program-cc14",
+   "title": "Starting a new program",
+   "requested_by": "@MagicMisa",
+   "built_by": "mika",
+   "kind": "web_page",
+   "url": "https://randomsci.github.io/mika-generated-games/games/starting-new-program-cc14/",
+   "published_at": 1790954883,
+   "has_thumbnail": true
+  },
+  {
    "job_id": "8df454fa393f",
    "slug": "hand-representation-subway-footlong-5723",
    "title": "Hand representation of a Subway footlong sandwich",
