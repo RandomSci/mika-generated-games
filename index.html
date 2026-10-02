@@ -3,35 +3,95 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Games built live by Mika</title>
+<title>Games built live by Mika and Luna</title>
+<meta name="description" content="Games requested in chat and coded live on stream by Mika and Luna.">
 <style>
-  :root { --night: #0f1d3a; --dusk: #2a4a86; --glass: #9cc2ff; --lamp: #ffb55e; --paper: #f4ead8; }
+  :root { --night: #0f1d3a; --dusk: #2a4a86; --glass: #9cc2ff; --lamp: #ffb55e; --paper: #f4ead8; --paint: #ff6f9c; }
+  * { box-sizing: border-box; }
   body { margin: 0; min-height: 100vh; color: var(--paper);
          background: linear-gradient(#0b1530, #1b2f5c);
          font-family: Nunito, Quicksand, "Avenir Next", "Segoe UI", system-ui, sans-serif; }
   main { max-width: 1100px; margin: 0 auto; padding: 56px 20px; }
   h1 { margin: 0 0 8px; font-size: clamp(36px, 6vw, 64px); font-weight: 900;
         text-shadow: 0 0 28px rgba(255, 181, 94, .45); }
-  .lead { margin: 0 0 40px; color: var(--glass); font-size: 20px; }
+  .lead { margin: 0 0 24px; color: var(--glass); font-size: 20px; }
+  .bar { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin-bottom: 32px; }
+  .search { flex: 1 1 280px; padding: 14px 18px; border-radius: 999px; font: inherit; font-size: 18px;
+            color: var(--paper); background: rgba(15, 29, 58, .7); border: 1px solid rgba(156, 194, 255, .35); }
+  .search:focus { outline: none; border-color: var(--lamp); }
+  .live { padding: 14px 22px; border-radius: 999px; font-weight: 800; text-decoration: none;
+          color: var(--night); background: var(--lamp); white-space: nowrap; }
+  .live:hover { filter: brightness(1.08); }
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
-  .card { display: block; text-decoration: none; color: inherit; border-radius: 18px; overflow: hidden;
+  .card { display: flex; flex-direction: column; border-radius: 18px; overflow: hidden;
           background: rgba(42, 74, 134, .35); border: 1px solid rgba(156, 194, 255, .2); }
-  .card:hover, .card:focus-visible { border-color: var(--lamp); outline: none; }
-  .card img, .card .ph { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover;
+  .card:hover, .card:focus-within { border-color: var(--lamp); }
+  .play { display: block; text-decoration: none; color: inherit; flex: 1; }
+  .play img, .play .ph { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover;
                          background: linear-gradient(135deg, #13254a, #2a4a86); }
   .card h2 { margin: 14px 16px 4px; font-size: 22px; }
-  .card p { margin: 0 16px 16px; color: rgba(244, 234, 216, .7); }
-  .empty { color: var(--glass); }
+  .card p { margin: 0 16px 12px; color: rgba(244, 234, 216, .7); }
+  .share { margin: 0 16px 16px; padding: 10px 14px; border-radius: 12px; font: inherit; font-weight: 800;
+           cursor: pointer; color: var(--paper); background: rgba(255, 111, 156, .18);
+           border: 1px solid rgba(255, 111, 156, .45); }
+  .share:hover { background: rgba(255, 111, 156, .3); }
+  .empty, .none { color: var(--glass); }
+  .none { display: none; }
 </style>
 </head>
 <body>
 <main>
-<h1>Games built live by Mika</h1>
-<p class="lead">Every one of these was requested in chat and coded on stream.</p>
-<div class="grid">
-<a class="card" href="games/building-new-space-shooter-game-a34e/"><img src="games/building-new-space-shooter-game-a34e/thumb.png" alt="" loading="lazy"><h2>building a new space shooter game</h2><p>Requested by @you</p></a>
-<a class="card" href="games/flappy-bird-game-luna-bird-60d4/"><img src="games/flappy-bird-game-luna-bird-60d4/thumb.png" alt="" loading="lazy"><h2>A Flappy Bird game where Luna is the bird.</h2><p>Requested by @you</p></a>
+<h1>Games built live by Mika and Luna</h1>
+<p class="lead">Every one of these was requested in chat and coded on stream. Play them, share them, and ask for your own.</p>
+<div class="bar">
+  <input class="search" id="search" type="search" placeholder="Search your name, a game, Mika or Luna…" aria-label="Search games">
+  <a class="live" href="https://www.youtube.com/@SelwynBuilds-j1s" target="_blank" rel="noopener">▶ Watch Mika and Luna live</a>
 </div>
+<div class="grid" id="grid">
+<article class="card" data-search="space shooter game @you "><a class="play" href="games/building-new-space-shooter-game-a34e/"><img src="games/building-new-space-shooter-game-a34e/thumb.png" alt="" loading="lazy"><h2>Space shooter game</h2><p>Requested by @you</p></a><button class="share" type="button" data-slug="building-new-space-shooter-game-a34e" data-title="Space shooter game">Share with friends</button></article>
+<article class="card" data-search="flappy bird game where luna is the bird @you "><a class="play" href="games/flappy-bird-game-luna-bird-60d4/"><img src="games/flappy-bird-game-luna-bird-60d4/thumb.png" alt="" loading="lazy"><h2>Flappy Bird game where Luna is the bird</h2><p>Requested by @you</p></a><button class="share" type="button" data-slug="flappy-bird-game-luna-bird-60d4" data-title="Flappy Bird game where Luna is the bird">Share with friends</button></article>
+</div>
+<p class="none" id="none">No game matches that yet. Ask Mika or Luna for it on stream!</p>
 </main>
+<script>
+(function () {
+  var search = document.getElementById("search");
+  var cards = Array.prototype.slice.call(document.querySelectorAll(".card"));
+  var none = document.getElementById("none");
+  function filter() {
+    var words = search.value.toLowerCase().replace(/^@/, "").split(/\s+/).filter(Boolean);
+    var shown = 0;
+    cards.forEach(function (card) {
+      var text = card.getAttribute("data-search") || "";
+      var ok = words.every(function (w) { return text.indexOf(w) !== -1; });
+      card.style.display = ok ? "" : "none";
+      if (ok) shown++;
+    });
+    none.style.display = cards.length && !shown ? "block" : "none";
+  }
+  search.addEventListener("input", filter);
+  var q = new URLSearchParams(location.search).get("q");
+  if (q) { search.value = q; filter(); }
+
+  document.addEventListener("click", function (event) {
+    var button = event.target.closest(".share");
+    if (!button) return;
+    var url = new URL("games/" + button.getAttribute("data-slug") + "/", location.href).href;
+    var title = button.getAttribute("data-title") || "A game built live by Mika and Luna";
+    var text = "Play " + title + ", built live on stream by Mika and Luna!";
+    if (navigator.share) {
+      navigator.share({ title: title, text: text, url: url }).catch(function () {});
+      return;
+    }
+    var done = function () {
+      var old = button.textContent;
+      button.textContent = "Link copied!";
+      setTimeout(function () { button.textContent = old; }, 1600);
+    };
+    if (navigator.clipboard) navigator.clipboard.writeText(url).then(done, function () { prompt("Copy this link", url); });
+    else prompt("Copy this link", url);
+  });
+})();
+</script>
 </body>
 </html>
