@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Games built live by Mika</title>
+<style>
+  :root { --night: #0f1d3a; --dusk: #2a4a86; --glass: #9cc2ff; --lamp: #ffb55e; --paper: #f4ead8; }
+  body { margin: 0; min-height: 100vh; color: var(--paper);
+         background: linear-gradient(#0b1530, #1b2f5c);
+         font-family: Nunito, Quicksand, "Avenir Next", "Segoe UI", system-ui, sans-serif; }
+  main { max-width: 1100px; margin: 0 auto; padding: 56px 20px; }
+  h1 { margin: 0 0 8px; font-size: clamp(36px, 6vw, 64px); font-weight: 900;
+        text-shadow: 0 0 28px rgba(255, 181, 94, .45); }
+  .lead { margin: 0 0 40px; color: var(--glass); font-size: 20px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
+  .card { display: block; text-decoration: none; color: inherit; border-radius: 18px; overflow: hidden;
+          background: rgba(42, 74, 134, .35); border: 1px solid rgba(156, 194, 255, .2); }
+  .card:hover, .card:focus-visible { border-color: var(--lamp); outline: none; }
+  .card img, .card .ph { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover;
+                         background: linear-gradient(135deg, #13254a, #2a4a86); }
+  .card h2 { margin: 14px 16px 4px; font-size: 22px; }
+  .card p { margin: 0 16px 16px; color: rgba(244, 234, 216, .7); }
+  .empty { color: var(--glass); }
+</style>
+</head>
+<body>
+<main>
+<h1>Games built live by Mika</h1>
+<p class="lead">Every one of these was requested in chat and coded on stream.</p>
+<div class="grid">
+<a class="card" href="games/flappy-bird-game-luna-bird-60d4/"><img src="games/flappy-bird-game-luna-bird-60d4/thumb.png" alt="" loading="lazy"><h2>A Flappy Bird game where Luna is the bird.</h2><p>Requested by @you</p></a>
+</div>
+</main>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{
+ "title": "Games built live by Mika",
+ "games": [
+  {
+   "job_id": "4932cdbde123",
+   "slug": "flappy-bird-game-luna-bird-60d4",
+   "title": "A Flappy Bird game where Luna is the bird.",
+   "requested_by": "@you",
+   "kind": "web_game_flyer",
+   "url": "https://randomsci.github.io/mika-generated-games/games/flappy-bird-game-luna-bird-60d4/",
+   "published_at": 1790932070,
+   "has_thumbnail": true
+  }
+ ]
+}
