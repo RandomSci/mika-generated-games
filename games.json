@@ -2,17 +2,6 @@
  "title": "Games built live by Mika and Luna",
  "games": [
   {
-   "job_id": "0350ec152968",
-   "slug": "game-look-better-ad89",
-   "title": "Game look better",
-   "requested_by": "@SelwynBuilds-j1s",
-   "built_by": "mika",
-   "kind": "web_game",
-   "url": "https://randomsci.github.io/mika-generated-games/games/game-look-better-ad89/",
-   "published_at": 1790948431,
-   "has_thumbnail": true
-  },
-  {
    "job_id": "12669f2d17ea",
    "slug": "game-look-better-fabe",
    "title": "Game look better",
