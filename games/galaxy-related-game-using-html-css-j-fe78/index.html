@@ -1,0 +1,160 @@
+<!doctype html>
+<html>
+<head><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' data: blob:; connect-src 'self'; font-src 'self' data:; worker-src 'self' blob:; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta charset="utf-8">
+<title>Galaxy Quest</title>
+<style>
+  :root {
+    --night: #0f1d3a;
+    --dusk:  #2a4a86;
+    --glass: #9cc2ff;
+    --lamp:  #ffb55e;
+    --paint: #ff6f9c;
+    --mint:  #5fe3c8;
+    --paper: #f4ead8;
+  }
+  html, body { 
+    margin: 0; 
+    height: 100%; 
+    overflow: hidden; 
+    background: linear-gradient(var(--night), #1b2f5c); 
+    font-family: "Nunito", "Quicksand", "Avenir Next", "Segoe UI", system-ui, sans-serif; 
+  }
+  .score-label {
+    font-family: "Nunito", sans-serif;
+    font-size: 28px;
+    color: var(--paper);
+  }
+</style>
+<script src="../../libs/phaser/3.90.0/phaser.min.js"></script>
+</head>
+<body>
+<script>
+// ===== SETTINGS: change these first =====
+const SETTINGS = {
+  title: "Galaxy Quest",
+  players: [
+    { name: "Mika", image: "../../assets/characters/mika-head.png", color: 0xffb55e, speed: 350 },
+    { name: "Luna", image: "../../assets/characters/luna-head.png", color: 0x9cc2ff, speed: 340 },
+  ],
+  playerSize: 80,
+  coins: 8,
+  enemies: 4,
+  enemySpeed: 200,
+  roundSeconds: 30,
+  background: "../../assets/backgrounds/space-nebula.svg",
+};
+
+const W = window.innerWidth, H = window.innerHeight, FONT = "Nunito, Quicksand, 'Segoe UI', system-ui, sans-serif";
+
+class Play extends Phaser.Scene {
+  constructor() { super("play"); }
+
+  preload() {
+    const svg = (key, url, w, h) => this.load.svg(key, url, { width: w, height: h });
+    svg("bg", SETTINGS.background, W, H);
+    svg("coin", "../../assets/sprites/star-coin.svg", 80, 80);
+    svg("slime", "../../assets/sprites/slime.svg", 100, 88);
+    svg("ufo", "../../assets/sprites/ufo.svg", 140, 76);
+    SETTINGS.players.forEach((p, i) => this.load.image("player" + i, p.image));
+  }
+
+  create() {
+    this.add.image(0, 0, "bg").setOrigin(0, 0);
+    this.players = SETTINGS.players.map((p, i) => {
+      const sprite = this.add.image(500 + i * 800, 600, "player" + i).setDepth(5);
+      sprite.setScale(SETTINGS.playerSize / sprite.height);
+      const label = this.add.text(200 + i * 400, 50, "", {
+        fontFamily: FONT, fontSize: "36px", color: "#f4ead8", fontStyle: "bold"
+      }).setDepth(10).setAlign('center');
+      return { ...p, sprite, label, score: 0 };
+    });
+
+    this.coins = [];
+    for (let i = 0; i < SETTINGS.coins; i++) this.addCoin();
+
+    this.enemies = [];
+    for (let i = 0; i < SETTINGS.enemies; i++) this.addEnemy();
+
+    this.timerText = this.add.text(W - 140, 50, "", {
+      fontFamily: FONT, fontSize: "36px", color: "#9cc2ff"
+    }).setOrigin(1, 0).setDepth(10);
+
+    this.roundLeft = SETTINGS.roundSeconds;
+    this.updateLabels();
+  }
+
+  addCoin() {
+    const coin = this.add.image(Phaser.Math.Between(160, W - 160), Phaser.Math.Between(220, H - 120), "coin").setDepth(3);
+    this.tweens.add({ targets: coin, angle: 360, duration: 3000, repeat: -1 });
+    this.coins.push(coin);
+  }
+
+  addEnemy() {
+    const ufo = this.add.image(Phaser.Math.Between(300, W - 300), Phaser.Math.Between(100, H - 200), "ufo").setDepth(4);
+    this.tweens.add({ targets: ufo, angle: 360, duration: 4000, repeat: -1 });
+    this.enemies.push(ufo);
+  }
+
+  updateLabels() {
+    this.players.forEach((p) => p.label.setText(`${p.name} ${p.score}`));
+  }
+
+  steer(p, dt) {
+    const coin = this.coins.reduce((best, c) => {
+      const d = Phaser.Math.Distance.Between(c.x, c.y, p.sprite.x, p.sprite.y);
+      return d < best.d ? { c, d } : best;
+    }, { c: null, d: Infinity }).c;
+
+    let ax = 0, ay = 0;
+    if (coin) {
+      const angle = Phaser.Math.Angle.Between(p.sprite.x, p.sprite.y, coin.x, coin.y);
+      ax += Math.cos(angle);
+      ay += Math.sin(angle);
+    }
+
+    p.sprite.x += ax * p.speed * dt;
+    p.sprite.y += ay * p.speed * dt;
+
+    p.sprite.x = Phaser.Math.Clamp(p.sprite.x, 80, W - 80);
+    p.sprite.y = Phaser.Math.Clamp(p.sprite.y, 80, H - 80);
+  }
+
+  newRound() {
+    this.players.forEach((p) => { p.score = 0; });
+    this.roundLeft = SETTINGS.roundSeconds;
+    this.updateLabels();
+  }
+
+  update(_time, deltaMs) {
+    const dt = Math.min(deltaMs / 1000, 0.05);
+    this.roundLeft -= dt;
+    this.timerText.setText(Math.ceil(Math.max(0, this.roundLeft)) + "s");
+
+    if (this.roundLeft <= 0) this.newRound();
+
+    for (const p of this.players) {
+      this.steer(p, dt);
+      this.coins = this.coins.filter((coin) => {
+        if (Phaser.Math.Distance.Between(coin.x, coin.y, p.sprite.x, p.sprite.y) > 40) return true;
+        p.score += 1;
+        coin.destroy();
+        this.addCoin();
+        return false;
+      });
+    }
+
+    this.updateLabels();
+  }
+}
+
+new Phaser.Game({
+  type: Phaser.AUTO,
+  width: W,
+  height: H,
+  backgroundColor: "#0b1530",
+  scene: Play,
+});
+</script>
+</body>
+</html>

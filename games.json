@@ -2,6 +2,17 @@
  "title": "Games built live by Mika and Luna",
  "games": [
   {
+   "job_id": "a67e0668e848",
+   "slug": "galaxy-related-game-using-html-css-j-fe78",
+   "title": "Galaxy related game using HTML, CSS, and JS",
+   "requested_by": "@SelwynBuilds-j1s",
+   "built_by": "mika",
+   "kind": "web_game",
+   "url": "https://randomsci.github.io/mika-generated-games/games/galaxy-related-game-using-html-css-j-fe78/",
+   "published_at": 1790948016,
+   "has_thumbnail": true
+  },
+  {
    "job_id": "8b5bd48aa5fa",
    "slug": "edit-code-not-use-some-controls-on-g-2cdf",
    "title": "Edit the code to not use some controls on the game",
