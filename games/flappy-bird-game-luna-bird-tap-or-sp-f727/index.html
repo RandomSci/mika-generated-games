@@ -17,12 +17,12 @@ const SETTINGS = {
   player: "../../assets/characters/luna-head.png", 
   playerHeight: 92,                           
   gap: 300,                                   
-  speed: 300,                                 
+  speed: 400,                                 // Increased speed
   gravity: 1500,
   flap: -560,
   pipeEvery: 1.55,                            
   skill: 0.85,                                
-  accent: 0xffb55e,
+  accent: 0xff0000, // Changed to red color for pipes
 };
 
 class Play extends Phaser.Scene {
@@ -102,11 +102,11 @@ class Play extends Phaser.Scene {
     const top = this.add.container(x, 0);
     const bottom = this.add.container(x, 0);
     const half = SETTINGS.gap / 2;
-    const topBody = this.add.tileSprite(0, (gapY - half) / 2, 96, gapY - half, "pipe");
-    const topCap = this.add.image(0, gapY - half - 22, "cap");
+    const topBody = this.add.tileSprite(0, (gapY - half) / 2, 96, gapY - half, "pipe").setTint(SETTINGS.accent); // Changed the tint to red
+    const topCap = this.add.image(0, gapY - half - 22, "cap").setTint(SETTINGS.accent); // Changed the tint to red
     const botH = 1080 - (gapY + half);
-    const botBody = this.add.tileSprite(0, gapY + half + botH / 2, 96, botH, "pipe");
-    const botCap = this.add.image(0, gapY + half + 22, "cap");
+    const botBody = this.add.tileSprite(0, gapY + half + botH / 2, 96, botH, "pipe").setTint(SETTINGS.accent); // Changed the tint to red
+    const botCap = this.add.image(0, gapY + half + 22, "cap").setTint(SETTINGS.accent); // Changed the tint to red
     top.add([topBody, topCap]);
     bottom.add([botBody, botCap]);
     this.pipes.push({ top, bottom, x, gapY, scored: false });
