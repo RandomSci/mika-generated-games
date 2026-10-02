@@ -87,6 +87,20 @@ class Play extends Phaser.Scene {
     }).setOrigin(0.5).setShadow(0, 0, "#ff6f9c", 30, true, true).setDepth(12);
     this.tweens.add({ targets: this.banner, alpha: 0, scale: 1.15, delay: 1500, duration: 900 });
 
+    // Display the user's name with animation
+    this.usernameText = this.add.text(W / 2, 100, "Your Name", {
+      fontFamily: FONT, fontSize: "72px", fontStyle: "800", color: "#ffb55e",
+    }).setOrigin(0.5).setDepth(11).setAlpha(0);
+    this.tweens.add({
+      targets: this.usernameText,
+      alpha: 1,
+      y: 150,
+      duration: 2000,
+      ease: 'Cubic.easeInOut',
+      yoyo: true,
+      repeat: -1
+    });
+
     this.roundLeft = SETTINGS.roundSeconds;
     this.updateLabels();
 
