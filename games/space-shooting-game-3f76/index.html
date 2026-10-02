@@ -173,12 +173,21 @@ class Play extends Phaser.Scene {
       this.spawnTimer = Math.max(0.25, SETTINGS.spawnEvery - this.wave * 0.05);
     }
 
-    for (const shot of this.shots) { shot.y -= 1400 * dt; }
+    for (const shot of this.shots) { 
+      shot.y -= 1400 * dt; 
+    }
+
     for (const e of this.enemies) {
       e.sprite.y += e.vy * dt;
       if (!e.dead && Phaser.Math.Distance.Between(e.sprite.x, e.sprite.y, this.player.x, this.player.y) < e.r + 40) {
         this.hit(e); this.playerHit();
       }
+      // Collision avoidance for meteors
+      this.shots.forEach(shot => {
+        if (!e.dead && Phaser.Math.Distance.Between(shot.x, shot.y, e.sprite.x, e.sprite.y) < 40) {
+          shot.destroy(); // remove shot if it hits the meteor
+        }
+      });
     }
 
     this.shots = this.shots.filter((s) => s.y > -60);
