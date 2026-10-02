@@ -2,17 +2,6 @@
  "title": "Games built live by Mika and Luna",
  "games": [
   {
-   "job_id": "c6ffe30855a9",
-   "slug": "game-67f8",
-   "title": "Game",
-   "requested_by": "@FRCFinance",
-   "built_by": "mika",
-   "kind": "web_game",
-   "url": "https://randomsci.github.io/mika-generated-games/games/game-67f8/",
-   "published_at": 1790951633,
-   "has_thumbnail": true
-  },
-  {
    "job_id": "8b5bd48aa5fa",
    "slug": "edit-code-not-use-some-controls-on-g-2cdf",
    "title": "Edit the code to not use some controls on the game",
