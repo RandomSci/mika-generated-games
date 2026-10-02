@@ -166,10 +166,22 @@ class Play extends Phaser.Scene {
     }
 
     this.updateLabels();
-    
+
     // Add shimmering effect on players
     this.players.forEach(p => {
       p.sprite.setAlpha(0.5 + 0.5 * Math.sin(Date.now() * 0.005 + p.sprite.x));
+      this.addParticles(p.sprite.x, p.sprite.y);
+    });
+  }
+
+  addParticles(x, y) {
+    const particle = this.add.image(x, y, "star").setAlpha(0.6);
+    this.tweens.add({
+      targets: particle,
+      alpha: 0,
+      scale: 2,
+      duration: 1000,
+      onComplete: () => particle.destroy()
     });
   }
 }
