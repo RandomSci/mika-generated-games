@@ -2,6 +2,17 @@
  "title": "Games built live by Mika and Luna",
  "games": [
   {
+   "job_id": "d50d70745a29",
+   "slug": "flappy-bird-game-luna-bird-tap-or-sp-f727",
+   "title": "Flappy bird game where Luna is the bird and tap or space to jump",
+   "requested_by": "@MathUnlockedYT",
+   "built_by": "mika",
+   "kind": "web_game_flyer",
+   "url": "https://randomsci.github.io/mika-generated-games/games/flappy-bird-game-luna-bird-tap-or-sp-f727/",
+   "published_at": 1790941785,
+   "has_thumbnail": true
+  },
+  {
    "job_id": "7f94a443614c",
    "slug": "building-new-space-shooter-game-a34e",
    "title": "building a new space shooter game",
