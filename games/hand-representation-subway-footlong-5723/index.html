@@ -1,0 +1,151 @@
+<!doctype html>
+<html>
+<head><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' data: blob:; connect-src 'self'; font-src 'self' data:; worker-src 'self' blob:; object-src 'none'; base-uri 'none'; form-action 'none'"><script>window.GAME_MODE="player";</script><!--vr-rescue--><script>(function(){var a=EventTarget.prototype.addEventListener;EventTarget.prototype.addEventListener=function(t,f,o){if(/^(click|pointerdown|pointerup|mousedown|mouseup|touchstart|touchend|submit)$/.test(t)){try{this.__vrClick=true}catch(e){}}return a.call(this,t,f,o)};})();</script><!--/vr-rescue-->
+<meta charset="utf-8">
+<title>Subway Footlong</title>
+<style>
+  :root { --night: #0f1d3a; --dusk: #2a4a86; --glass: #9cc2ff; --lamp: #ffb55e; --paint: #ff6f9c; --mint: #5fe3c8; --paper: #f4ead8; }
+  html, body { margin: 0; height: 100%; overflow: hidden; background: linear-gradient(to bottom, var(--night), var(--dusk)); }
+  #art { position: fixed; inset: 0; will-change: transform; background-size: cover; background-position: center; }
+  #light { position: fixed; inset: 0; pointer-events: none; mix-blend-mode: screen; background: linear-gradient(105deg, transparent 35%, rgba(255, 240, 210, .16) 48%, transparent 60%); animation: sweep 9s ease-in-out infinite; }
+  @keyframes sweep { 0% { background-position: 120% 0; } 60%, 100% { background-position: -40% 0; } }
+  #fx { position: fixed; inset: 0; pointer-events: none; }
+  .card { position: fixed; left: 5vw; bottom: 7vh; max-width: 70vw; color: var(--paper); font-family: "Nunito", "Segoe UI", system-ui, sans-serif; }
+  .card h1 { margin: 0; font-size: clamp(34px, 5vw, 92px); font-weight: 900; line-height: 1; text-shadow: 0 4px 0 rgba(0, 0, 0, .35), 0 0 34px rgba(255, 111, 156, .45); }
+  .card p { margin: 1.4vh 0 0; font-size: clamp(16px, 1.8vw, 28px); font-weight: 700; opacity: 0; animation: fade 1s 1.4s forwards; }
+  @keyframes fade { to { opacity: 1; } }
+</style>
+</head>
+<body>
+<div id="art" style="background-image: url('../../assets/generated/art-1790954421-eac6f1.jpg');"></div>
+<div id="light"></div>
+<canvas id="fx"></canvas>
+<div class="card"><h1 id="title">Give our hand a Subway footlong</h1><p id="subtitle">Painted live on stream</p></div>
+<script>
+// Settings
+const SETTINGS = {
+  title: "Subway Footlong",
+  subtitle: "Give our hand a Subway footlong",
+  particlesCount: 40,
+  effects: ["sparkles", "bokeh"],
+  amount: 1,
+  drift: 1,
+};
+
+// Setup the canvas and context
+const fx = document.getElementById("fx"), ctx = fx.getContext("2d");
+function fit() { 
+  fx.width = innerWidth * devicePixelRatio; 
+  fx.height = innerHeight * devicePixelRatio; 
+  ctx.scale(devicePixelRatio, devicePixelRatio); // Scale the context for high DPI displays
+}
+addEventListener("resize", fit); fit();
+
+// Particle generation
+const particles = [];
+const KINDS = {
+  sparkles: { n: 40, make: () => ({ x: Math.random(), y: Math.random(), r: Math.random() * 5 + 5, life: Math.random() * 2 + 1 }) },
+  bokeh: { n: 30, make: () => ({ x: Math.random(), y: Math.random(), r: Math.random() * 30 + 20, life: Math.random() * 5 + 2 }) },
+};
+function spawn(kind) {
+  const p = KINDS[kind].make();
+  p.kind = kind; p.age = 0; p.color = '#ffb55e'; // Set to warm color
+  particles.push(p);
+}
+SETTINGS.effects.forEach((kind) => {
+  for (let i = 0; i < KINDS[kind].n * SETTINGS.amount; i++) { spawn(kind); }
+});
+
+// Drawing particles
+function drawParticle(p, W, H) {
+  const x = p.x * W, y = p.y * H, fade = 1 - (p.age / p.life);
+  ctx.fillStyle = p.color; ctx.globalAlpha = fade;
+  ctx.beginPath(); ctx.arc(x, y, p.r, 0, Math.PI * 2); ctx.fill();
+}
+
+// Animation loop
+let last = performance.now();
+function frame(now) {
+  const dt = Math.min(0.1, (now - last) / 1000);
+  last = now;
+  
+  ctx.clearRect(0, 0, fx.width, fx.height);
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const p = particles[i];
+    p.age += dt;
+    if (p.age > p.life) particles.splice(i, 1); // Remove dead particles
+    else drawParticle(p, fx.width, fx.height);
+  }
+  
+  // Make sure to spawn to keep the effect alive
+  if (particles.length < SETTINGS.particlesCount) {
+    spawn("sparkles");
+  }
+  
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+</script>
+<!--vr-rescue--><script>
+window.addEventListener("load", function () { setTimeout(function () {
+  if (window.__vrClick || document.__vrClick || window.onclick || document.onclick) return;
+  function handled(el) {
+    for (var n = el; n && n !== document; n = n.parentNode)
+      if (n.__vrClick || n.onclick || (n.getAttribute && n.getAttribute("onclick"))) return true;
+    return false;
+  }
+  var words = ["contact", "work", "project", "portfolio", "service", "pricing", "price", "plan",
+    "about", "team", "feature", "faq", "menu", "book", "start", "home"];
+  var sections = Array.prototype.filter.call(document.querySelectorAll("[id]"), function (e) {
+    return e.offsetHeight > 60 && e.tagName !== "svg" && !(e.closest && e.closest("svg"));
+  });
+  function sectionFor(label) {
+    label = (label || "").toLowerCase();
+    for (var i = 0; i < words.length; i++) {
+      if (label.indexOf(words[i]) === -1) continue;
+      var w = words[i] === "book" || words[i] === "start" ? "contact" : words[i];
+      for (var j = 0; j < sections.length; j++) {
+        var s = sections[j], h = s.querySelector("h1,h2,h3");
+        if (s.id.toLowerCase().indexOf(w) !== -1 || (h && h.textContent.toLowerCase().indexOf(w) !== -1)) return s;
+      }
+    }
+    return null;
+  }
+  var note;
+  function demo() {
+    if (!note) {
+      note = document.createElement("div");
+      note.textContent = "Thanks! This page was built live on stream by Mika and Luna, so this button is a demo.";
+      note.style.cssText = "position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:99999;" +
+        "max-width:90vw;padding:12px 18px;border-radius:12px;background:#111827;color:#fff;" +
+        "font:600 15px system-ui,sans-serif;box-shadow:0 10px 30px rgba(0,0,0,.35);transition:opacity .3s";
+      document.body.appendChild(note);
+    }
+    note.style.opacity = "1";
+    clearTimeout(note.t); note.t = setTimeout(function () { note.style.opacity = "0"; }, 2600);
+  }
+  function rescue(el) {
+    el.addEventListener("click", function (e) {
+      e.preventDefault();
+      var s = sectionFor(el.textContent);
+      if (s) s.scrollIntoView({ behavior: "smooth", block: "start" }); else demo();
+    });
+  }
+  Array.prototype.forEach.call(document.querySelectorAll("a"), function (a) {
+    var href = (a.getAttribute("href") || "").trim();
+    if (href.charAt(0) === "#" && href.length > 1) {
+      var id = href.slice(1); try { id = decodeURIComponent(id); } catch (e) {}
+      if (document.getElementById(id)) return;
+    } else if (href && href !== "#" && !/^javascript:/i.test(href)) return;
+    if (!handled(a)) rescue(a);
+  });
+  Array.prototype.forEach.call(document.querySelectorAll("form"), function (f) {
+    if (!handled(f) && !f.onsubmit) f.addEventListener("submit", function (e) { e.preventDefault(); demo(); });
+  });
+  Array.prototype.forEach.call(document.querySelectorAll("button, [role=button], input[type=button]"), function (b) {
+    if (b.disabled || b.form || handled(b)) return;
+    rescue(b);
+  });
+}, 300); });
+</script><!--/vr-rescue--></body>
+</html>

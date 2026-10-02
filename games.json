@@ -2,6 +2,17 @@
  "title": "Games built live by Mika and Luna",
  "games": [
   {
+   "job_id": "8df454fa393f",
+   "slug": "hand-representation-subway-footlong-5723",
+   "title": "Hand representation of a Subway footlong sandwich",
+   "requested_by": "@MagicMisa",
+   "built_by": "luna",
+   "kind": "web_art",
+   "url": "https://randomsci.github.io/mika-generated-games/games/hand-representation-subway-footlong-5723/",
+   "published_at": 1790954492,
+   "has_thumbnail": true
+  },
+  {
    "job_id": "8b5bd48aa5fa",
    "slug": "edit-code-not-use-some-controls-on-g-2cdf",
    "title": "Edit the code to not use some controls on the game",
