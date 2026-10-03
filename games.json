@@ -2,6 +2,17 @@
  "title": "Games built live by Mika and Luna",
  "games": [
   {
+   "job_id": "74065f9f1d7b",
+   "slug": "wiki-users-add-taxonomized-knowledge-bf30",
+   "title": "Wiki for users to add taxonomized knowledge and retrieve it later",
+   "requested_by": "@AyamAtmaBrahma0",
+   "built_by": "luna",
+   "kind": "web_site",
+   "url": "https://randomsci.github.io/mika-generated-games/games/wiki-users-add-taxonomized-knowledge-bf30/",
+   "published_at": 1790989331,
+   "has_thumbnail": true
+  },
+  {
    "job_id": "052825468bc5",
    "slug": "chess-game-fb05",
    "title": "Chess game",
